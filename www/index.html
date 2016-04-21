@@ -82,8 +82,8 @@ window.addEventListener("load", function() {
 		createjs.Tween.get(ball)
 		.wait(1000)
 		.to({scaleX:scale,scaleY:scale},500)
-		.to({scaleX:1,scaleY:1},500);
-		// .to({alpha:0.01},1000);
+		.to({scaleX:1,scaleY:1},500)
+		.to({alpha:0.01},1000);
 	}	
 	balls.x = (stageW-(size+spacing)*5)/2;
 	balls.y = stageH*.05;
@@ -128,7 +128,7 @@ window.addEventListener("load", function() {
 
 	mobile.swipe(tray);
 	var tick = createjs.Ticker.on("tick",stage);
-	tray.on("swipe",function(e){
+	var swipeEvent = tray.on("swipe",function(e){
 		if(e.swipeX != -1)return;
 		lastColor = null;
 		console.log(e.swipeX);
@@ -139,8 +139,9 @@ window.addEventListener("load", function() {
 				console.log(score);
 
 				points = 1;
-				scores.text = "";
-				scores.text += score;
+				scores.text = "Score: "+score;
+				// score
+				// scores.text += score;
 				answer.text = "";
 				console.log(answer.text);
 				answer.x = stageW/2;
@@ -150,10 +151,13 @@ window.addEventListener("load", function() {
 		// var tick = createjs.Ticker.on("tick",stage);
 	});
 
+	tray.off('swipe',swipeEvent);
+	tray.on('swipe',swipeEvent);
 
 	balls.cursor = "pointer";
 	balls.on('mousedown',function(e){
 		var targetColor =e.target.graphics._fill.style;
+		e.target.mouseEnabled = false;
 		console.log(e.target);
 		console.log(e.target.graphics._fill.style);
 		createjs.Tween.get(e.target)
